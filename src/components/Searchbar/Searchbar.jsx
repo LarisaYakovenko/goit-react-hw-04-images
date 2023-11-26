@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
@@ -18,48 +18,84 @@ export const paramsForNotify = {
   fontSize: '24px',
 };
 
-export class Searchbar extends Component {
-  state = {
-    query: '',
+export const Searchbar = ({ onSubmit }) => {
+  const [query, setQuery] = useState('');
+
+  const handleChange = e => {
+    setQuery(e.target.value);
   };
 
-  handleChange = e => {
-    this.setState({ query: e.target.value });
-  };
-
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-
-    if (this.state.query.trim() === '') {
+    if (query.trim() === '') {
       Notify.info('Enter your request, please!', paramsForNotify);
       return;
     }
 
-    this.props.onSubmit(this.state.query);
+    onSubmit(query);
   };
 
-  render() {
-    const { value } = this.state;
+  return (
+    <SearchbarStyle>
+      <SearchForm onSubmit={handleSubmit}>
+        <SearchFormButton>
+          <HiMagnifyingGlass size="24" />
+        </SearchFormButton>
+        <SearchFormInput
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+          value={query}
+          onChange={handleChange}
+        />
+      </SearchForm>
+    </SearchbarStyle>
+  );
+};
 
-    return (
-      <SearchbarStyle>
-        <SearchForm onSubmit={this.handleSubmit}>
-          <SearchFormButton>
-            <HiMagnifyingGlass size="24" />
-          </SearchFormButton>
-          <SearchFormInput
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            value={value}
-            onChange={this.handleChange}
-          />
-        </SearchForm>
-      </SearchbarStyle>
-    );
-  }
-}
+// export class Searchbar extends Component {
+//   state = {
+//     query: '',
+//   };
+
+//   handleChange = e => {
+//     this.setState({ query: e.target.value });
+//   };
+
+//   handleSubmit = e => {
+//     e.preventDefault();
+
+//     if (this.state.query.trim() === '') {
+//       Notify.info('Enter your request, please!', paramsForNotify);
+//       return;
+//     }
+
+//     this.props.onSubmit(this.state.query);
+//   };
+
+//   render() {
+//     const { value } = this.state;
+
+//     return (
+//       <SearchbarStyle>
+//         <SearchForm onSubmit={this.handleSubmit}>
+//           <SearchFormButton>
+//             <HiMagnifyingGlass size="24" />
+//           </SearchFormButton>
+//           <SearchFormInput
+//             type="text"
+//             autoComplete="off"
+//             autoFocus
+//             placeholder="Search images and photos"
+//             value={value}
+//             onChange={this.handleChange}
+//           />
+//         </SearchForm>
+//       </SearchbarStyle>
+//     );
+//   }
+// }
 
 Searchbar.propType = {
   onSubmit: PropTypes.func.isRequired,

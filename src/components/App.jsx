@@ -30,8 +30,8 @@ export const App = () => {
 
   const handleSubmit = query => {
     setQuery({ query });
-    // setPage(1);
-    // setImages([]);
+    setPage(1);
+    setImages([]);
     // console.log(query);
 
     // if (this.state.query === query) {
@@ -41,7 +41,11 @@ export const App = () => {
     // this.setState({ query, page: 1, images: [] });
   };
   const openModal = url => {
-    setUrl({ url });
+    setUrl(url);
+  };
+
+  const close = () => {
+    url(false);
   };
 
   useEffect(() => {
@@ -50,9 +54,7 @@ export const App = () => {
 
     getImages(query, page)
       .then(data => {
-        setImages(prevState => ({
-          images: [...prevState, ...data.hits],
-        }));
+        setImages(prevState => [...prevState, ...data.hits]);
         const totalPages = Math.ceil(data.totalHits / 12);
         if (page < totalPages) {
           setIsLoadMore(true);
@@ -80,7 +82,7 @@ export const App = () => {
       <Searchbar onSubmit={handleSubmit} />
       {isLoading && <Loader />}
       <ImageGallery images={images} openModal={openModal} />
-      {url && <Modal closeModal={openModal} url={url} />}
+      {url && <Modal closeModal={close} url={url} />}
       {isLoadMore && <Button onClick={() => handleLoadMore()} />}
     </AppStyle>
   );
