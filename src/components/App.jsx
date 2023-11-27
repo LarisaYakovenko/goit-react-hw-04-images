@@ -24,7 +24,7 @@ export const App = () => {
   const [url, setUrl] = useState('');
 
   const handleLoadMore = () => {
-    setPage(prevState => ({ page: prevState.page + 1 }));
+    setPage(prevState => prevState + 1);
   };
 
   const handleSubmit = query => {
