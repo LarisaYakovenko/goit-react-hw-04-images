@@ -28,7 +28,7 @@ export const App = () => {
   };
 
   const handleSubmit = query => {
-    setQuery({ query });
+    setQuery(query);
     setPage(1);
     setImages([]);
   };
@@ -40,7 +40,7 @@ export const App = () => {
     if (!query) return;
     setIsLoading(true);
 
-    getImages(query, page)
+    getImages({ query, page })
       .then(data => {
         setImages(prevState => [...prevState, ...data.hits]);
         const totalPages = Math.ceil(data.totalHits / 12);
