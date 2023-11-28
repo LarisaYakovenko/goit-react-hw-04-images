@@ -42,17 +42,15 @@ export const App = () => {
 
     getImages({ query, page })
       .then(data => {
-        setImages(prevState => [...prevState, ...data.hits]);
-        const totalPages = Math.ceil(data.totalHits / 12);
-        if (page < totalPages) {
-          setIsLoadMore(true);
-        }
         if (!data.totalHits) {
           return Notify.failure(
             'Sorry, there are no images matching your search query. Please try again.',
             paramsForNotify
           );
         }
+        setImages(prevState => [...prevState, ...data.hits]);
+
+        setIsLoadMore(page < Math.ceil(data.totalHits / 12));
       })
       .catch(error => {
         Notify.failure(
